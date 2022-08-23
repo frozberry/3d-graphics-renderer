@@ -14,6 +14,6 @@ fn main() {
         application.input();
         application.update();
         application.render();
-        ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
+        application.cap_fps();
     }
 }
