@@ -1,6 +1,17 @@
 use sdl2::{rect::Rect, render::Canvas, video::Window};
 
-use crate::vec3::Vec2;
+use crate::{mesh::Mesh, vec3::Vec2};
+
+pub fn render_mesh(mesh: &Mesh, canvas: &mut Canvas<Window>) {
+    for projected_face in &mesh.projected_faces {
+        for i in 0..3 {
+            let a = projected_face[i];
+            let b = projected_face[(i + 1) % 3];
+
+            draw_line(a, b, canvas);
+        }
+    }
+}
 
 pub fn draw_line(a: Vec2, b: Vec2, canvas: &mut Canvas<Window>) {
     let ab = b - a;

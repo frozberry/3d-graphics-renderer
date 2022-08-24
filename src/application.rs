@@ -88,21 +88,9 @@ impl Application {
     pub fn render(&mut self) {
         self.canvas.set_draw_color(Color::RGB(0, 64, 255));
         self.canvas.clear();
+
         self.canvas.set_draw_color(Color::RGB(0, 0, 0));
-
-        for projected_face in &self.mesh.projected_faces {
-            for i in 0..3 {
-                let a = projected_face[i];
-                let b = projected_face[(i + 1) % 3];
-
-                display::draw_line(a, b, &mut self.canvas);
-
-                // Could use ruilt in SDL function
-                // let start = Point::new(a.x as i32, a.y as i32);
-                // let end = Point::new(b.x as i32, b.y as i32);
-                // self.canvas.draw_line(start, end).unwrap();
-            }
-        }
+        display::render_mesh(&self.mesh, &mut self.canvas);
 
         self.canvas.present();
     }
