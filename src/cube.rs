@@ -1,4 +1,5 @@
 use crate::{
+    application::{HEIGHT, WIDTH},
     camera::Camera,
     face::Face,
     vec3::{Vec2, Vec3},
@@ -7,9 +8,8 @@ use crate::{
 pub struct Cube {
     rotation: Vec3,
     verticies: [Vec3; 8],
-    pub projected_points: [Vec2; 8],
-    faces: Vec<Face>,
-    pub triangle_points: Vec<Vec2>,
+    faces: [Face; 12],
+    pub projected_faces: [[Vec2; 3]; 12],
 }
 
 impl Cube {
@@ -25,7 +25,7 @@ impl Cube {
             Vec3::new(-1., -1., 1.),
         ];
 
-        let faces = vec![
+        let faces = [
             [1, 2, 3],
             [1, 3, 4],
             [4, 3, 5],
@@ -41,16 +41,13 @@ impl Cube {
         ];
 
         let rotation = Vec3::init();
-        let projected_points = [Vec2::init(); 8];
-
-        let triangle_points = vec![];
+        let projected_faces = [[Vec2::init(); 3]; 12];
 
         Cube {
             rotation,
             verticies,
             faces,
-            projected_points,
-            triangle_points,
+            projected_faces,
         }
     }
 
@@ -59,48 +56,22 @@ impl Cube {
         self.rotation.y += 0.01;
         self.rotation.z += 0.01;
 
-        // self.project_verticies(camera);
-        // self.update_verticies(camera);
         self.project_faces(camera);
     }
 
-    // fn update_verticies(&mut self, camera: Camera) {
-    //     for i in 0..self.verticies.len() {
-    //         let mut vertex = self.verticies[i];
-    //         vertex = vertex.rot_x(self.rotation.x);
-    //         vertex = vertex.rot_y(self.rotation.y);
-    //         vertex = vertex.rot_z(self.rotation.z);
-    //         vertex.z -= camera.pos.z;
-
-    //         self.verticies[i] = vertex;
-    //     }
-    // }
-
-    // fn project_verticies(&mut self, camera: Camera) {
-    //     for i in 0..self.verticies.len() {
-    //         let mut vertex = self.verticies[i];
-    //         vertex = vertex.rot_x(self.rotation.x);
-    //         vertex = vertex.rot_y(self.rotation.y);
-    //         vertex = vertex.rot_z(self.rotation.z);
-    //         vertex.z -= camera.pos.z;
-
-    //         let projected_point = vertex.project(camera.fov);
-    //         self.projected_points[i] = projected_point
-    //     }
-    // }
-
     fn project_faces(&mut self, camera: Camera) {
-        self.triangle_points = vec![];
         for i in 0..self.faces.len() {
             let face = self.faces[i];
 
-            for v_index in face {
+            for (j, v_index) in face.iter().enumerate() {
                 let vertex = self.verticies[v_index - 1];
                 let rotated = vertex.rotate(self.rotation);
                 let transformed = rotated - camera.pos;
 
                 let projected = transformed.project(camera.fov);
-                self.triangle_points.push(projected);
+                let centered = projected.centered();
+
+                self.projected_faces[i][j] = centered
             }
         }
     }

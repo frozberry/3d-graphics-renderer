@@ -1,5 +1,7 @@
 use std::ops::Sub;
 
+use crate::application::{HEIGHT, WIDTH};
+
 #[derive(Clone, Copy, Debug)]
 pub struct Vec3 {
     pub x: f32,
@@ -77,5 +79,9 @@ impl Vec2 {
 
     pub fn init() -> Self {
         Vec2 { x: 0., y: 0. }
+    }
+
+    pub fn centered(&self) -> Vec2 {
+        Vec2::new(self.x + WIDTH as f32 / 2., self.y + HEIGHT as f32 / 2.)
     }
 }

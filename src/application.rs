@@ -1,12 +1,12 @@
 use std::time::Duration;
 
-use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 use sdl2::Sdl;
+use sdl2::{event::Event, rect::Point};
 
 use crate::{
     camera::Camera,
@@ -88,11 +88,21 @@ impl Application {
         self.canvas.clear();
         self.canvas.set_draw_color(Color::RGB(0, 0, 0));
 
-        for point in &self.cube.triangle_points {
-            let w = WIDTH as i32 / 2;
-            let h = HEIGHT as i32 / 2;
-            let rect = Rect::new(point.x as i32 + w, point.y as i32 + h, 4, 4);
-            self.canvas.draw_rect(rect).unwrap();
+        // for point in &self.cube.projected {
+        //     let w = WIDTH as i32 / 2;
+        //     let h = HEIGHT as i32 / 2;
+        //     let rect = Rect::new(point.x as i32 + w, point.y as i32 + h, 4, 4);
+        //     self.canvas.draw_rect(rect).unwrap();
+        // }
+
+        for projected_face in self.cube.projected_faces {
+            for i in 0..3 {
+                let a = projected_face[i];
+                let b = projected_face[(i + 1) % 3];
+                let start = Point::new(a.x as i32, a.y as i32);
+                let end = Point::new(b.x as i32, b.y as i32);
+                self.canvas.draw_line(start, end).unwrap();
+            }
         }
 
         self.canvas.present();
