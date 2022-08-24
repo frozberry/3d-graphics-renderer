@@ -11,6 +11,8 @@
 //     }
 // }
 
+use std::fmt::Display;
+
 use crate::vec3::Vec2;
 
 pub type Face = [usize; 3];

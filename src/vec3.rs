@@ -1,4 +1,4 @@
-use std::ops::Sub;
+use std::{fmt::Display, ops::Sub};
 
 use crate::application::{HEIGHT, WIDTH};
 
@@ -63,6 +63,12 @@ impl Sub for Vec3 {
 
     fn sub(self, rhs: Self) -> Self::Output {
         Vec3::new(self.x - rhs.x, self.y - rhs.y, self.z - rhs.z)
+    }
+}
+
+impl Display for Vec3 {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "x: {}, y: {}, z: {}", self.x, self.y, self.z)
     }
 }
 

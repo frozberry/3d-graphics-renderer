@@ -1,7 +1,5 @@
 extern crate sdl2;
 
-use std::time::Duration;
-
 use application::Application;
 
 mod application;
@@ -10,6 +8,7 @@ mod cube;
 mod display;
 mod face;
 mod mesh;
+mod parser;
 mod sdl;
 mod vec3;
 

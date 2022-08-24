@@ -1,7 +1,10 @@
+use std::f32::consts::PI;
+
 use crate::{
     application::{HEIGHT, WIDTH},
     camera::Camera,
     face::{Face, ProjectedFace},
+    parser::parse_obj,
     vec3::{Vec2, Vec3},
 };
 
@@ -13,7 +16,20 @@ pub struct Mesh {
 }
 
 impl Mesh {
-    pub fn new() -> Self {
+    pub fn new(obj_path: &str) -> Self {
+        let (verticies, faces) = parse_obj(obj_path);
+        let rotation = Vec3::init();
+        let projected_faces = vec![[Vec2::init(); 3]; faces.len()];
+
+        Mesh {
+            rotation,
+            verticies,
+            faces,
+            projected_faces,
+        }
+    }
+
+    pub fn init() -> Self {
         let rotation = Vec3::init();
 
         let verticies = vec![];
@@ -29,7 +45,7 @@ impl Mesh {
     }
 
     pub fn new_cube() -> Self {
-        let mut mesh = Mesh::new();
+        let mut mesh = Mesh::init();
         let verticies = vec![
             Vec3::new(-1., -1., -1.),
             Vec3::new(-1., 1., -1.),
@@ -63,9 +79,9 @@ impl Mesh {
     }
 
     pub fn update(&mut self, camera: Camera) {
-        self.rotation.x = 10.;
-        self.rotation.y += 0.01;
-        self.rotation.z += 0.01;
+        // self.rotation.x = -PI;
+        self.rotation.x += 0.02;
+        // self.rotation.y += 0.02;
 
         self.project_faces(camera);
     }

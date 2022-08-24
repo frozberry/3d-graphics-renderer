@@ -36,7 +36,7 @@ impl Application {
     pub fn new() -> Self {
         let (sdl, canvas) = init_sdl();
 
-        let mesh = Mesh::new_cube();
+        let mesh = Mesh::new("./assets/f22.obj");
         let camera = Camera::new(640., Vec3::new(0., 0., -5.));
 
         Application {
@@ -86,10 +86,11 @@ impl Application {
     /*                                   Render                                   */
     /* -------------------------------------------------------------------------- */
     pub fn render(&mut self) {
-        self.canvas.set_draw_color(Color::RGB(0, 64, 255));
+        // self.canvas.set_draw_color(Color::RGB(0, 64, 255));
+        self.canvas.set_draw_color(Color::RGB(0, 0, 0));
         self.canvas.clear();
 
-        self.canvas.set_draw_color(Color::RGB(0, 0, 0));
+        self.canvas.set_draw_color(Color::RGB(0, 255, 0));
         display::render_mesh(&self.mesh, &mut self.canvas);
 
         self.canvas.present();
