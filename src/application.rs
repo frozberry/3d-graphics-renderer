@@ -9,6 +9,7 @@ use sdl2::video::Window;
 use sdl2::Sdl;
 
 use crate::{
+    camera::Camera,
     sdl::init_sdl,
     vec3::{Vec2, Vec3},
 };
@@ -22,14 +23,17 @@ pub struct Application {
     r: u8,
     g: u8,
     b: u8,
+
     x: i32,
     y: i32,
+
     clockwise: bool,
     running: bool,
+
+    cube_rotation: Vec3,
     cube_points: Vec<Vec3>,
     projected_points: Vec<Vec2>,
-    cube_rotation: Vec3,
-    camera_pos: Vec3,
+    camera: Camera,
 }
 
 impl Application {
@@ -50,17 +54,18 @@ impl Application {
         }
 
         let cube_rotation = Vec3::init();
-        let camera_pos = Vec3::new(0., 0., -5.);
         let projected_points = vec![];
+
+        let camera = Camera::new(640., Vec3::new(0., 0., -5.));
 
         Application {
             sdl,
             canvas,
+            camera,
             running: true,
             cube_points,
             cube_rotation,
             projected_points,
-            camera_pos,
             clockwise: true,
             r: 0,
             g: 64,
@@ -124,7 +129,7 @@ impl Application {
             point = point.rot_y(self.cube_rotation.y);
             point = point.rot_z(self.cube_rotation.z);
 
-            point.z -= self.camera_pos.z;
+            point.z -= self.camera.pos.z;
 
             let projected_point = Self::project(point);
             self.projected_points.push(projected_point);

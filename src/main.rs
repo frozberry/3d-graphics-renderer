@@ -5,6 +5,7 @@ use std::time::Duration;
 use application::Application;
 
 mod application;
+mod camera;
 mod sdl;
 mod vec3;
 
