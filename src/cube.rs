@@ -26,18 +26,18 @@ impl Cube {
         ];
 
         let faces = vec![
-            Face::new(1, 2, 3),
-            Face::new(1, 3, 4),
-            Face::new(4, 3, 5),
-            Face::new(4, 5, 6),
-            Face::new(6, 5, 7),
-            Face::new(6, 7, 8),
-            Face::new(8, 7, 2),
-            Face::new(8, 2, 1),
-            Face::new(2, 7, 5),
-            Face::new(2, 5, 3),
-            Face::new(6, 8, 1),
-            Face::new(6, 1, 4),
+            [1, 2, 3],
+            [1, 3, 4],
+            [4, 3, 5],
+            [4, 5, 6],
+            [6, 5, 7],
+            [6, 7, 8],
+            [8, 7, 2],
+            [8, 2, 1],
+            [2, 7, 5],
+            [2, 5, 3],
+            [6, 8, 1],
+            [6, 1, 4],
         ];
 
         let rotation = Vec3::init();
@@ -94,21 +94,14 @@ impl Cube {
         for i in 0..self.faces.len() {
             let face = self.faces[i];
 
-            let mut v1 = self.verticies[face.a - 1];
-            let mut v2 = self.verticies[face.b - 1];
-            let mut v3 = self.verticies[face.c - 1];
+            for v_index in face {
+                let vertex = self.verticies[v_index - 1];
+                let rotated = vertex.rotate(self.rotation);
+                let transformed = rotated - camera.pos;
 
-            v1 = v1.rotate(self.rotation) - camera.pos;
-            v2 = v2.rotate(self.rotation) - camera.pos;
-            v3 = v3.rotate(self.rotation) - camera.pos;
-
-            let p1 = v1.project(camera.fov);
-            let p2 = v2.project(camera.fov);
-            let p3 = v3.project(camera.fov);
-
-            self.triangle_points.push(p1);
-            self.triangle_points.push(p2);
-            self.triangle_points.push(p3);
+                let projected = transformed.project(camera.fov);
+                self.triangle_points.push(projected);
+            }
         }
     }
 }
