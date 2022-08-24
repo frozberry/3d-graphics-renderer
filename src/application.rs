@@ -20,10 +20,11 @@ pub const WIDTH: u32 = 800;
 pub const HEIGHT: u32 = 600;
 
 pub struct Application {
+    running: bool,
     sdl: Sdl,
     canvas: Canvas<Window>,
 
-    running: bool,
+    paused: bool,
 
     cube: Cube,
     camera: Camera,
@@ -42,6 +43,7 @@ impl Application {
             camera,
             cube,
             running: true,
+            paused: false,
         }
     }
 
@@ -59,6 +61,9 @@ impl Application {
                 Event::KeyDown { keycode, .. } => match keycode.unwrap() {
                     Keycode::Escape => {
                         self.running = false;
+                    }
+                    Keycode::P => {
+                        self.paused = !self.paused;
                     }
                     Keycode::Left => {}
                     Keycode::Right => {}
@@ -99,6 +104,10 @@ impl Application {
 
     pub fn running(&self) -> bool {
         self.running
+    }
+
+    pub fn paused(&self) -> bool {
+        self.paused
     }
 }
 

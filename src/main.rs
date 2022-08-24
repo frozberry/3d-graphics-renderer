@@ -16,8 +16,11 @@ fn main() {
 
     while application.running() {
         application.input();
-        application.update();
-        application.render();
-        application.cap_fps();
+
+        if !application.paused() {
+            application.update();
+            application.render();
+            application.cap_fps();
+        }
     }
 }
