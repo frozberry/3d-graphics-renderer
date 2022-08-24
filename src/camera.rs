@@ -1,5 +1,6 @@
 use crate::vec3::Vec3;
 
+#[derive(Clone, Copy)]
 pub struct Camera {
     pub fov: f32,
     pub pos: Vec3,

@@ -1,4 +1,6 @@
-#[derive(Clone, Copy)]
+use std::ops::Sub;
+
+#[derive(Clone, Copy, Debug)]
 pub struct Vec3 {
     pub x: f32,
     pub y: f32,
@@ -16,6 +18,14 @@ impl Vec3 {
             y: 0.,
             z: 0.,
         }
+    }
+
+    pub fn rotate(&self, rotation: Vec3) -> Vec3 {
+        let mut rotated = *self;
+        rotated = rotated.rot_x(rotation.x);
+        rotated = rotated.rot_y(rotation.y);
+        rotated = rotated.rot_z(rotation.z);
+        rotated
     }
 
     pub fn rot_x(&self, angle: f32) -> Vec3 {
@@ -38,9 +48,23 @@ impl Vec3 {
         let z = self.z;
         Vec3::new(x, y, z)
     }
+
+    pub fn project(&self, fov: f32) -> Vec2 {
+        let x = self.x * fov / self.z;
+        let y = self.y * fov / self.z;
+        Vec2::new(x, y)
+    }
 }
 
-#[derive(Clone, Copy)]
+impl Sub for Vec3 {
+    type Output = Vec3;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        Vec3::new(self.x - rhs.x, self.y - rhs.y, self.z - rhs.z)
+    }
+}
+
+#[derive(Clone, Copy, Debug)]
 pub struct Vec2 {
     pub x: f32,
     pub y: f32,

@@ -6,6 +6,8 @@ use application::Application;
 
 mod application;
 mod camera;
+mod cube;
+mod face;
 mod sdl;
 mod vec3;
 
