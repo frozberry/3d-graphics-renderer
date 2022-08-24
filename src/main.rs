@@ -5,8 +5,9 @@ use std::time::Duration;
 use application::Application;
 
 mod application;
-
+mod sdl;
 mod vec3;
+
 fn main() {
     let mut application = Application::new();
 

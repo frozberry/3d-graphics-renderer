@@ -8,10 +8,13 @@ use sdl2::render::Canvas;
 use sdl2::video::Window;
 use sdl2::Sdl;
 
-use crate::vec3::{Vec2, Vec3};
+use crate::{
+    sdl::init_sdl,
+    vec3::{Vec2, Vec3},
+};
 
-const WIDTH: u32 = 800;
-const HEIGHT: u32 = 600;
+pub const WIDTH: u32 = 800;
+pub const HEIGHT: u32 = 600;
 
 pub struct Application {
     sdl: Sdl,
@@ -21,6 +24,7 @@ pub struct Application {
     b: u8,
     x: i32,
     y: i32,
+    clockwise: bool,
     running: bool,
     cube_points: Vec<Vec3>,
     projected_points: Vec<Vec2>,
@@ -30,20 +34,7 @@ pub struct Application {
 
 impl Application {
     pub fn new() -> Self {
-        let sdl_context = sdl2::init().unwrap();
-        let video_subsystem = sdl_context.video().unwrap();
-
-        let window = video_subsystem
-            .window("Graphics", WIDTH, HEIGHT)
-            .position_centered()
-            .build()
-            .unwrap();
-
-        let mut canvas = window.into_canvas().build().unwrap();
-
-        canvas.set_draw_color(Color::RGB(0, 255, 255));
-        canvas.clear();
-        canvas.present();
+        let (sdl, canvas) = init_sdl();
 
         let mut cube_points = vec![];
         for i in 0..8 {
@@ -63,13 +54,14 @@ impl Application {
         let projected_points = vec![];
 
         Application {
-            sdl: sdl_context,
+            sdl,
             canvas,
             running: true,
             cube_points,
             cube_rotation,
             projected_points,
             camera_pos,
+            clockwise: true,
             r: 0,
             g: 64,
             b: 255,
@@ -88,11 +80,15 @@ impl Application {
                 Event::Quit { .. } => {
                     self.running = false;
                 }
+                Event::MouseButtonDown { x, y, .. } => {
+                    self.x = x;
+                    self.y = y;
+                }
                 Event::KeyDown { keycode, .. } => match keycode.unwrap() {
                     Keycode::Escape => {
                         self.running = false;
                     }
-                    Keycode::A => println!("hi"),
+                    Keycode::A => self.clockwise = !self.clockwise,
                     Keycode::Left => {
                         self.r = (self.r + 10) % u8::MAX;
                         self.b = (self.r - 10) % u8::MAX;
@@ -118,9 +114,9 @@ impl Application {
     /*                                   Update                                   */
     /* -------------------------------------------------------------------------- */
     pub fn update(&mut self) {
-        self.cube_rotation.x += 0.01;
-        self.cube_rotation.y += 0.01;
-        self.cube_rotation.z += 0.01;
+        self.cube_rotation.x = 10.;
+        self.cube_rotation.y += if self.clockwise { 0.01 } else { -0.01 };
+        // self.cube_rotation.z += 0.01;
 
         for i in 0..self.cube_points.len() {
             let mut point = self.cube_points[i];
