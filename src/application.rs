@@ -90,7 +90,6 @@ impl Application {
         self.canvas.set_draw_color(Color::RGB(0, 0, 0));
         self.canvas.clear();
 
-        self.canvas.set_draw_color(Color::RGB(0, 255, 0));
         display::render_mesh(&self.mesh, &mut self.canvas);
 
         self.canvas.present();
