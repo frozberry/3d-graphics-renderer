@@ -85,3 +85,11 @@ impl Vec2 {
         Vec2::new(self.x + WIDTH as f32 / 2., self.y + HEIGHT as f32 / 2.)
     }
 }
+
+impl Sub for Vec2 {
+    type Output = Vec2;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        Vec2::new(self.x - rhs.x, self.y - rhs.y)
+    }
+}
