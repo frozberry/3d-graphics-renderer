@@ -9,6 +9,7 @@ use sdl2::Sdl;
 use sdl2::{event::Event, rect::Point};
 
 use crate::display;
+use crate::mesh::Mesh;
 use crate::{
     camera::Camera,
     cube::Cube,
@@ -27,7 +28,7 @@ pub struct Application {
 
     paused: bool,
 
-    cube: Cube,
+    mesh: Mesh,
     camera: Camera,
 }
 
@@ -35,14 +36,14 @@ impl Application {
     pub fn new() -> Self {
         let (sdl, canvas) = init_sdl();
 
-        let cube = Cube::new();
+        let mesh = Mesh::new_cube();
         let camera = Camera::new(640., Vec3::new(0., 0., -5.));
 
         Application {
             sdl,
             canvas,
             camera,
-            cube,
+            mesh,
             running: true,
             paused: false,
         }
@@ -79,7 +80,7 @@ impl Application {
     /*                                   Update                                   */
     /* -------------------------------------------------------------------------- */
     pub fn update(&mut self) {
-        self.cube.update(self.camera);
+        self.mesh.update(self.camera);
     }
     /* -------------------------------------------------------------------------- */
     /*                                   Render                                   */
@@ -89,14 +90,14 @@ impl Application {
         self.canvas.clear();
         self.canvas.set_draw_color(Color::RGB(0, 0, 0));
 
-        for projected_face in self.cube.projected_faces {
+        for projected_face in &self.mesh.projected_faces {
             for i in 0..3 {
                 let a = projected_face[i];
                 let b = projected_face[(i + 1) % 3];
 
                 display::draw_line(a, b, &mut self.canvas);
 
-                // Could use built in SDL function
+                // Could use ruilt in SDL function
                 // let start = Point::new(a.x as i32, a.y as i32);
                 // let end = Point::new(b.x as i32, b.y as i32);
                 // self.canvas.draw_line(start, end).unwrap();

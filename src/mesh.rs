@@ -5,16 +5,32 @@ use crate::{
     vec3::{Vec2, Vec3},
 };
 
-pub struct Cube {
+pub struct Mesh {
     rotation: Vec3,
-    verticies: [Vec3; 8],
-    faces: [Face; 12],
-    pub projected_faces: [ProjectedFace; 12],
+    verticies: Vec<Vec3>,
+    faces: Vec<Face>,
+    pub projected_faces: Vec<ProjectedFace>,
 }
 
-impl Cube {
+impl Mesh {
     pub fn new() -> Self {
-        let verticies = [
+        let rotation = Vec3::init();
+
+        let verticies = vec![];
+        let faces = vec![];
+        let projected_faces = vec![[Vec2::init(); 3]];
+
+        Mesh {
+            rotation,
+            verticies,
+            faces,
+            projected_faces,
+        }
+    }
+
+    pub fn new_cube() -> Self {
+        let mut mesh = Mesh::new();
+        let verticies = vec![
             Vec3::new(-1., -1., -1.),
             Vec3::new(-1., 1., -1.),
             Vec3::new(1., 1., -1.),
@@ -25,7 +41,7 @@ impl Cube {
             Vec3::new(-1., -1., 1.),
         ];
 
-        let faces = [
+        let faces = vec![
             [1, 2, 3],
             [1, 3, 4],
             [4, 3, 5],
@@ -40,15 +56,10 @@ impl Cube {
             [6, 1, 4],
         ];
 
-        let rotation = Vec3::init();
-        let projected_faces = [[Vec2::init(); 3]; 12];
-
-        Cube {
-            rotation,
-            verticies,
-            faces,
-            projected_faces,
-        }
+        mesh.verticies = verticies;
+        mesh.faces = faces;
+        mesh.projected_faces = vec![[Vec2::init(); 3]; mesh.faces.len()];
+        mesh
     }
 
     pub fn update(&mut self, camera: Camera) {
@@ -65,13 +76,13 @@ impl Cube {
 
             for (j, v_index) in face.iter().enumerate() {
                 let vertex = self.verticies[v_index - 1];
-                let rotated = vertex.rotate(self.rotation);
-                let transformed = rotated - camera.pos;
+                let rotated_vertex = vertex.rotate(self.rotation);
+                let transformed_vertex = rotated_vertex - camera.pos;
 
-                let projected = transformed.project(camera.fov);
-                let centered = projected.centered();
+                let projected_vertex = transformed_vertex.project(camera.fov);
+                let centered_vertex = projected_vertex.centered();
 
-                self.projected_faces[i][j] = centered
+                self.projected_faces[i][j] = centered_vertex
             }
         }
     }

@@ -11,4 +11,7 @@
 //     }
 // }
 
+use crate::vec3::Vec2;
+
 pub type Face = [usize; 3];
+pub type ProjectedFace = [Vec2; 3];

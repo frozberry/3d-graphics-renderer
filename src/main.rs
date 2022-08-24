@@ -9,6 +9,7 @@ mod camera;
 mod cube;
 mod display;
 mod face;
+mod mesh;
 mod sdl;
 mod vec3;
 
