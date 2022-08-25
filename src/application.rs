@@ -10,6 +10,7 @@ use sdl2::{event::Event, rect::Point};
 
 use crate::display;
 use crate::mesh::Mesh;
+use crate::render_mode::RenderMode;
 use crate::vec::vec3::Vec3;
 use crate::{camera::Camera, cube::Cube, face::Face, sdl::init_sdl};
 
@@ -24,6 +25,8 @@ pub struct Application {
     mesh: Mesh,
     camera: Camera,
     cube: bool,
+    render_mode: RenderMode,
+    cull: bool,
 }
 
 impl Application {
@@ -41,6 +44,8 @@ impl Application {
             running: true,
             paused: false,
             cube: true,
+            render_mode: RenderMode::WireVertex,
+            cull: true,
         }
     }
 
@@ -62,6 +67,11 @@ impl Application {
                     Keycode::P => {
                         self.paused = !self.paused;
                     }
+                    Keycode::C => self.cull = !self.cull,
+                    Keycode::Q => self.render_mode = RenderMode::FillTriangle,
+                    Keycode::W => self.render_mode = RenderMode::FillTriangleWire,
+                    Keycode::E => self.render_mode = RenderMode::Wire,
+                    Keycode::R => self.render_mode = RenderMode::WireVertex,
                     Keycode::T => {
                         if self.cube {
                             self.mesh = Mesh::new("./assets/f22.obj");
@@ -84,7 +94,7 @@ impl Application {
     /*                                   Update                                   */
     /* -------------------------------------------------------------------------- */
     pub fn update(&mut self) {
-        self.mesh.update(self.camera);
+        self.mesh.update(self.camera, self.cull);
     }
     /* -------------------------------------------------------------------------- */
     /*                                   Render                                   */

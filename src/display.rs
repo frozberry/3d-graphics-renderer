@@ -9,6 +9,8 @@ use sdl2::{
 use crate::{mesh::Mesh, vec::vec2::Vec2};
 
 pub fn render_mesh(mesh: &Mesh, canvas: &mut Canvas<Window>) {
+    let mut r = 0;
+    let mut bl = 255;
     for projected_face in &mesh.projected_faces {
         for i in 0..3 {
             let a = projected_face[i];
@@ -32,9 +34,11 @@ pub fn render_mesh(mesh: &Mesh, canvas: &mut Canvas<Window>) {
                 b.y as i16,
                 c.x as i16,
                 c.y as i16,
-                Color::GREEN,
+                Color::RGB(r, 255, bl),
             )
             .unwrap();
+        r = (r + 20) % u8::MAX;
+        bl = (bl - 20) % u8::MAX;
     }
 }
 

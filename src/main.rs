@@ -11,6 +11,7 @@ mod mesh;
 mod parser;
 mod sdl;
 mod vec;
+mod render_mode;
 
 fn main() {
     let mut application = Application::new();
