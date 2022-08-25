@@ -44,9 +44,9 @@ impl Application {
             running: true,
             paused: false,
             cube: true,
-            render_mode: RenderMode::WireVertex,
+            render_mode: RenderMode::Wire,
             cull: true,
-        }
+    }
     }
 
     /* -------------------------------------------------------------------------- */
@@ -68,10 +68,10 @@ impl Application {
                         self.paused = !self.paused;
                     }
                     Keycode::C => self.cull = !self.cull,
-                    Keycode::Q => self.render_mode = RenderMode::FillTriangle,
-                    Keycode::W => self.render_mode = RenderMode::FillTriangleWire,
-                    Keycode::E => self.render_mode = RenderMode::Wire,
-                    Keycode::R => self.render_mode = RenderMode::WireVertex,
+                    Keycode::Q => self.render_mode = RenderMode::Wire,
+                    Keycode::W => self.render_mode = RenderMode::WireVertex,
+                    Keycode::E => self.render_mode = RenderMode::FillTriangle,
+                    Keycode::R => self.render_mode = RenderMode::FillTriangleWire,
                     Keycode::T => {
                         if self.cube {
                             self.mesh = Mesh::new("./assets/f22.obj");
@@ -104,7 +104,7 @@ impl Application {
         self.canvas.set_draw_color(Color::RGB(0, 0, 0));
         self.canvas.clear();
 
-        display::render_mesh(&self.mesh, &mut self.canvas);
+        display::render_mesh(&self.mesh, self.render_mode, &mut self.canvas);
 
         self.canvas.present();
     }
