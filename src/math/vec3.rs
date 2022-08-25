@@ -28,9 +28,6 @@ impl Vec3 {
     }
 
     pub fn cross(&self, b: Vec3) -> Vec3 {
-        // .x = a.y * b.z - a.z * b.y,
-        // .y = a.z * b.x - a.x * b.z,
-        // .z = a.x * b.y - a.y * b.x
         let x = self.y * b.z - self.z * b.y;
         let y = self.z * b.x - self.x * b.z;
         let z = self.x * b.y - self.y * b.x;
@@ -38,7 +35,6 @@ impl Vec3 {
     }
 
     pub fn dot(&self, b: Vec3) -> f32 {
-        // self.x * b.x + self.y * b.y + self.z * b.z
         (self.x * b.x) + (self.y * b.y) + (self.z * b.z)
     }
 
@@ -75,6 +71,21 @@ impl Vec3 {
         let x = self.x * fov / self.z;
         let y = self.y * fov / self.z;
         Vec2::new(x, y)
+    }
+
+    fn magnitude(&self) -> f32 {
+        (f32::powf(self.x, 2.) + f32::powf(self.y, 2.) + f32::powf(self.z, 2.)).sqrt()
+    }
+
+    pub fn unit_vector(&self) -> Vec3 {
+        let mut result = Vec3::init();
+        let length = self.magnitude();
+        if length != 0. {
+            result.x = self.x / length;
+            result.y = self.y / length;
+            result.z = self.z / length;
+        }
+        result
     }
 }
 

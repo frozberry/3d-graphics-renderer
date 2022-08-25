@@ -165,10 +165,10 @@ impl Mesh {
         let vb = vertices[1];
         let vc = vertices[2];
 
-        let ab = vb - va;
-        let ac = vc - va;
+        let ab = (vb - va).unit_vector();
+        let ac = (vc - va).unit_vector();
 
-        let normal = ab.cross(ac);
+        let normal = ab.cross(ac).unit_vector();
 
         let camera_ray = camera.pos - va;
         let dot_normal_camera = normal.dot(camera_ray);
