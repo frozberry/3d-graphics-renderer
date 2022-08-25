@@ -5,6 +5,8 @@ use std::{
 
 use crate::application::{HEIGHT, WIDTH};
 
+use super::{vec3::Vec3, vec4::Vec4};
+
 #[derive(Clone, Copy)]
 pub struct Vec2 {
     pub x: f32,
@@ -168,5 +170,10 @@ impl ops::Neg for Vec2 {
 
     fn neg(self) -> Self::Output {
         Vec2::new(self.x * -1., self.y * -1.)
+    }
+}
+impl From<Vec4> for Vec2 {
+    fn from(v: Vec4) -> Self {
+        Self::new(v.x, v.y)
     }
 }

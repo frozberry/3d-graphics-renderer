@@ -1,3 +1,4 @@
+use std::f32::consts::PI;
 use std::time::Duration;
 
 use sdl2::keyboard::Keycode;
@@ -9,9 +10,10 @@ use sdl2::Sdl;
 use sdl2::{event::Event, rect::Point};
 
 use crate::display;
+use crate::math::mat4::Mat4;
+use crate::math::vec3::Vec3;
 use crate::mesh::Mesh;
 use crate::render_mode::RenderMode;
-use crate::math::vec3::Vec3;
 use crate::{camera::Camera, face::Face, sdl::init_sdl};
 
 pub const WIDTH: u32 = 800;
@@ -27,13 +29,20 @@ pub struct Application {
     cube: bool,
     render_mode: RenderMode,
     cull: bool,
+    projection_matrix: Mat4,
 }
 
 impl Application {
     pub fn new() -> Self {
         let (sdl, canvas) = init_sdl();
 
-        let mesh = Mesh::new_cube();
+        let fov = PI / 3.0;
+        let aspect = HEIGHT as f32 / WIDTH as f32;
+        let znear = 0.1;
+        let zfar = 100.;
+        let projection_matrix = Mat4::perspective(fov, aspect, znear, zfar);
+
+        let mesh = Mesh::new_cube(projection_matrix);
         let camera = Camera::new(640., Vec3::new(0., 0., 0.));
 
         Application {
@@ -46,6 +55,7 @@ impl Application {
             cube: true,
             render_mode: RenderMode::Wire,
             cull: true,
+            projection_matrix,
         }
     }
 

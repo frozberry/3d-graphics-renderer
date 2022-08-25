@@ -86,6 +86,32 @@ impl Mat4 {
         m.m[1][1] = c;
         m
     }
+
+    pub fn perspective(fov: f32, aspect: f32, znear: f32, zfar: f32) -> Mat4 {
+        // | (h/w)*1/tan(fov/2)             0              0                 0 |
+        // |                  0  1/tan(fov/2)              0                 0 |
+        // |                  0             0     zf/(zf-zn)  (-zf*zn)/(zf-zn) |
+        // |                  0             0              1                 0 |
+        let mut m = Self::identity();
+        m.m[0][0] = aspect * (1. / (fov / 2.).tan());
+        m.m[1][1] = 1. / (fov / 2.).tan();
+        m.m[2][2] = zfar / (zfar - znear);
+        m.m[2][3] = (-zfar * znear) / (zfar - znear);
+        m.m[3][2] = 1.;
+
+        m
+    }
+
+    pub fn project(projection_mat: Mat4, v: Vec4) -> Vec4 {
+        let mut result = projection_mat * v;
+
+        if result.w != 0.0 {
+            result.x /= result.w;
+            result.y /= result.w;
+            result.z /= result.w;
+        }
+        result
+    }
 }
 
 impl Mul for Mat4 {

@@ -17,10 +17,11 @@ pub struct Mesh {
     verticies: Vec<Vec3>,
     faces: Vec<Face>,
     pub projected_faces: Vec<ProjectedFace>,
+    projection_matrix: Mat4,
 }
 
 impl Mesh {
-    pub fn from_obj(obj_path: &str) -> Self {
+    pub fn from_obj(obj_path: &str, projection_matrix: Mat4) -> Self {
         let (verticies, faces) = parse_obj(obj_path);
         let rotation = Vec3::init();
         let translation = Vec3::init();
@@ -34,10 +35,11 @@ impl Mesh {
             verticies,
             faces,
             projected_faces,
+            projection_matrix,
         }
     }
 
-    pub fn init() -> Self {
+    pub fn init(projection_matrix: Mat4) -> Self {
         let rotation = Vec3::init();
         let verticies = vec![];
         let translation = Vec3::init();
@@ -52,11 +54,12 @@ impl Mesh {
             verticies,
             faces,
             projected_faces,
+            projection_matrix,
         }
     }
 
-    pub fn new_cube() -> Self {
-        let mut mesh = Mesh::init();
+    pub fn new_cube(projection_matrix: Mat4) -> Self {
+        let mut mesh = Mesh::init(projection_matrix);
         let verticies = vec![
             Vec3::new(-1., -1., -1.),
             Vec3::new(-1., 1., -1.),
@@ -141,7 +144,16 @@ impl Mesh {
 
             let projected_face: [Vec2; 3] = transformed_verticies
                 .iter()
-                .map(|vertex| vertex.project(camera.fov).centered())
+                .map(|vertex| {
+                    let v4 = Vec4::from(*vertex);
+                    let projected = Mat4::project(self.projection_matrix, v4);
+                    let mut v2 = Vec2::from(projected);
+
+                    v2.x *= WIDTH as f32 / 2.;
+                    v2.y *= HEIGHT as f32 / 2.;
+
+                    v2.centered()
+                })
                 .collect::<Vec<Vec2>>()
                 .try_into()
                 .unwrap();
