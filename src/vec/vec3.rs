@@ -2,6 +2,8 @@ use std::{fmt::Display, ops::Sub};
 
 use crate::application::{HEIGHT, WIDTH};
 
+use super::vec2::Vec2;
+
 #[derive(Clone, Copy, Debug)]
 pub struct Vec3 {
     pub x: f32,
@@ -69,33 +71,5 @@ impl Sub for Vec3 {
 impl Display for Vec3 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "x: {}, y: {}, z: {}", self.x, self.y, self.z)
-    }
-}
-
-#[derive(Clone, Copy, Debug)]
-pub struct Vec2 {
-    pub x: f32,
-    pub y: f32,
-}
-
-impl Vec2 {
-    pub fn new(x: f32, y: f32) -> Self {
-        Vec2 { x, y }
-    }
-
-    pub fn init() -> Self {
-        Vec2 { x: 0., y: 0. }
-    }
-
-    pub fn centered(&self) -> Vec2 {
-        Vec2::new(self.x + WIDTH as f32 / 2., self.y + HEIGHT as f32 / 2.)
-    }
-}
-
-impl Sub for Vec2 {
-    type Output = Vec2;
-
-    fn sub(self, rhs: Self) -> Self::Output {
-        Vec2::new(self.x - rhs.x, self.y - rhs.y)
     }
 }

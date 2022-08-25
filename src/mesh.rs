@@ -5,7 +5,7 @@ use crate::{
     camera::Camera,
     face::{Face, ProjectedFace},
     parser::parse_obj,
-    vec3::{Vec2, Vec3},
+    vec::{vec2::Vec2, vec3::Vec3},
 };
 
 pub struct Mesh {

@@ -10,13 +10,8 @@ use sdl2::{event::Event, rect::Point};
 
 use crate::display;
 use crate::mesh::Mesh;
-use crate::{
-    camera::Camera,
-    cube::Cube,
-    face::Face,
-    sdl::init_sdl,
-    vec3::{Vec2, Vec3},
-};
+use crate::vec::vec3::Vec3;
+use crate::{camera::Camera, cube::Cube, face::Face, sdl::init_sdl};
 
 pub const WIDTH: u32 = 800;
 pub const HEIGHT: u32 = 600;

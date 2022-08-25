@@ -6,7 +6,7 @@ use sdl2::{
     video::Window,
 };
 
-use crate::{mesh::Mesh, vec3::Vec2};
+use crate::{mesh::Mesh, vec::vec2::Vec2};
 
 pub fn render_mesh(mesh: &Mesh, canvas: &mut Canvas<Window>) {
     for projected_face in &mesh.projected_faces {

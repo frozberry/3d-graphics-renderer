@@ -2,7 +2,7 @@ use crate::{
     application::{HEIGHT, WIDTH},
     camera::Camera,
     face::{Face, ProjectedFace},
-    vec3::{Vec2, Vec3},
+    vec::{vec2::Vec2, vec3::Vec3},
 };
 
 pub struct Cube {

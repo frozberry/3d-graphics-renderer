@@ -10,7 +10,7 @@ mod face;
 mod mesh;
 mod parser;
 mod sdl;
-mod vec3;
+mod vec;
 
 fn main() {
     let mut application = Application::new();

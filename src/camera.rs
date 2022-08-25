@@ -1,4 +1,4 @@
-use crate::vec3::Vec3;
+use crate::vec::vec3::Vec3;
 
 #[derive(Clone, Copy)]
 pub struct Camera {

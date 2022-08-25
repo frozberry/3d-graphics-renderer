@@ -3,7 +3,7 @@ use std::{
     io::{BufRead, BufReader},
 };
 
-use crate::{face::Face, vec3};
+use crate::{face::Face, vec::vec3};
 use vec3::Vec3;
 
 pub fn parse_obj(path: &str) -> (Vec<Vec3>, Vec<Face>) {
