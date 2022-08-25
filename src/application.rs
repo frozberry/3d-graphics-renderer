@@ -12,7 +12,7 @@ use crate::display;
 use crate::mesh::Mesh;
 use crate::render_mode::RenderMode;
 use crate::vec::vec3::Vec3;
-use crate::{camera::Camera, cube::Cube, face::Face, sdl::init_sdl};
+use crate::{camera::Camera, face::Face, sdl::init_sdl};
 
 pub const WIDTH: u32 = 800;
 pub const HEIGHT: u32 = 600;
@@ -33,7 +33,7 @@ impl Application {
     pub fn new() -> Self {
         let (sdl, canvas) = init_sdl();
 
-        let mesh = Mesh::new("./assets/cube.obj");
+        let mesh = Mesh::new_cube();
         let camera = Camera::new(640., Vec3::new(0., 0., 0.));
 
         Application {
@@ -46,7 +46,7 @@ impl Application {
             cube: true,
             render_mode: RenderMode::Wire,
             cull: true,
-    }
+        }
     }
 
     /* -------------------------------------------------------------------------- */
@@ -72,15 +72,15 @@ impl Application {
                     Keycode::W => self.render_mode = RenderMode::WireVertex,
                     Keycode::E => self.render_mode = RenderMode::FillTriangle,
                     Keycode::R => self.render_mode = RenderMode::FillTriangleWire,
-                    Keycode::T => {
-                        if self.cube {
-                            self.mesh = Mesh::new("./assets/f22.obj");
-                            self.cube = false;
-                        } else {
-                            self.mesh = Mesh::new("./assets/cube.obj");
-                            self.cube = true;
-                        }
-                    }
+                    // Keycode::T => {
+                    //     if self.cube {
+                    //         self.mesh = Mesh::new("./assets/f22.obj");
+                    //         self.cube = false;
+                    //     } else {
+                    //         self.mesh = Mesh::new("./assets/cube.obj");
+                    //         self.cube = true;
+                    //     }
+                    // }
                     Keycode::Left => {}
                     Keycode::Right => {}
                     _ => {}

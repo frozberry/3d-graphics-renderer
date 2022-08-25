@@ -4,14 +4,13 @@ use application::Application;
 
 mod application;
 mod camera;
-mod cube;
 mod display;
 mod face;
 mod mesh;
 mod parser;
+mod render_mode;
 mod sdl;
 mod vec;
-mod render_mode;
 
 fn main() {
     let mut application = Application::new();

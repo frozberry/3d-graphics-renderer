@@ -1,5 +1,7 @@
 use std::f32::consts::PI;
 
+use sdl2::pixels::Color;
+
 use crate::{
     application::{HEIGHT, WIDTH},
     camera::Camera,
@@ -16,10 +18,10 @@ pub struct Mesh {
 }
 
 impl Mesh {
-    pub fn new(obj_path: &str) -> Self {
+    pub fn from_obj(obj_path: &str) -> Self {
         let (verticies, faces) = parse_obj(obj_path);
         let rotation = Vec3::init();
-        let projected_faces = vec![[Vec2::init(); 3]; faces.len()];
+        let projected_faces = vec![([Vec2::init(); 3], Color::WHITE); faces.len()];
 
         Mesh {
             rotation,
@@ -34,7 +36,7 @@ impl Mesh {
 
         let verticies = vec![];
         let faces = vec![];
-        let projected_faces = vec![[Vec2::init(); 3]];
+        let projected_faces = vec![([Vec2::init(); 3], Color::WHITE); faces.len()];
 
         Mesh {
             rotation,
@@ -58,18 +60,18 @@ impl Mesh {
         ];
 
         let faces = vec![
-            [1, 2, 3],
-            [1, 3, 4],
-            [4, 3, 5],
-            [4, 5, 6],
-            [6, 5, 7],
-            [6, 7, 8],
-            [8, 7, 2],
-            [8, 2, 1],
-            [2, 7, 5],
-            [2, 5, 3],
-            [6, 8, 1],
-            [6, 1, 4],
+            ([1, 2, 3], Color::WHITE),
+            ([1, 3, 4], Color::WHITE),
+            ([4, 3, 5], Color::RED),
+            ([4, 5, 6], Color::RED),
+            ([6, 5, 7], Color::GREEN),
+            ([6, 7, 8], Color::GREEN),
+            ([8, 7, 2], Color::BLUE),
+            ([8, 2, 1], Color::BLUE),
+            ([2, 7, 5], Color::MAGENTA),
+            ([2, 5, 3], Color::MAGENTA),
+            ([6, 8, 1], Color::YELLOW),
+            ([6, 1, 4], Color::YELLOW),
         ];
 
         mesh.verticies = verticies;
@@ -94,6 +96,7 @@ impl Mesh {
 
         for face in &self.faces {
             let transformed_verticies: [Vec3; 3] = face
+                .0
                 .iter()
                 .map(|v_index| {
                     let vertex = self.verticies[v_index - 1];
@@ -122,7 +125,7 @@ impl Mesh {
                 .unwrap();
 
             // Store the depth for sorting
-            let face_with_depth = (projected_face, average_depth);
+            let face_with_depth = ((projected_face, face.1), average_depth);
 
             projected_faces.push(face_with_depth);
         }

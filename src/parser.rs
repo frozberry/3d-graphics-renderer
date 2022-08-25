@@ -4,6 +4,7 @@ use std::{
 };
 
 use crate::{face::Face, vec::vec3};
+use sdl2::pixels::Color;
 use vec3::Vec3;
 
 pub fn parse_obj(path: &str) -> (Vec<Vec3>, Vec<Face>) {
@@ -46,11 +47,14 @@ pub fn parse_obj(path: &str) -> (Vec<Vec3>, Vec<Face>) {
                 let t3 = face_triples.next().unwrap();
                 let f3 = t3.split("/").next().unwrap();
 
-                let face = [
-                    f1.parse::<usize>().unwrap(),
-                    f2.parse::<usize>().unwrap(),
-                    f3.parse::<usize>().unwrap(),
-                ];
+                let face = (
+                    [
+                        f1.parse::<usize>().unwrap(),
+                        f2.parse::<usize>().unwrap(),
+                        f3.parse::<usize>().unwrap(),
+                    ],
+                    Color::GREEN,
+                );
                 faces.push(face)
             }
         }
