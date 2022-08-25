@@ -7,7 +7,7 @@ use crate::{
     camera::Camera,
     face::{Face, ProjectedFace},
     parser::parse_obj,
-    vec::{vec2::Vec2, vec3::Vec3},
+    math::{vec2::Vec2, vec3::Vec3},
 };
 
 pub struct Mesh {

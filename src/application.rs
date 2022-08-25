@@ -11,7 +11,7 @@ use sdl2::{event::Event, rect::Point};
 use crate::display;
 use crate::mesh::Mesh;
 use crate::render_mode::RenderMode;
-use crate::vec::vec3::Vec3;
+use crate::math::vec3::Vec3;
 use crate::{camera::Camera, face::Face, sdl::init_sdl};
 
 pub const WIDTH: u32 = 800;

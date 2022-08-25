@@ -10,7 +10,7 @@ use crate::{
     face::ProjectedFace,
     mesh::Mesh,
     render_mode::{self, RenderMode},
-    vec::vec2::Vec2,
+    math::vec2::Vec2,
 };
 
 pub fn render_mesh(mesh: &Mesh, render_mode: RenderMode, canvas: &mut Canvas<Window>) {

@@ -6,11 +6,11 @@ mod application;
 mod camera;
 mod display;
 mod face;
+mod math;
 mod mesh;
 mod parser;
 mod render_mode;
 mod sdl;
-mod vec;
 
 fn main() {
     let mut application = Application::new();

@@ -3,7 +3,7 @@ use std::{
     io::{BufRead, BufReader},
 };
 
-use crate::{face::Face, vec::vec3};
+use crate::{face::Face, math::vec3};
 use sdl2::pixels::Color;
 use vec3::Vec3;
 
