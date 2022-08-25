@@ -14,12 +14,27 @@ pub fn render_mesh(mesh: &Mesh, canvas: &mut Canvas<Window>) {
             let a = projected_face[i];
             let b = projected_face[(i + 1) % 3];
 
-            draw_line(a, b, canvas);
+            // draw_line(a, b, canvas);
+            // canvas.filled_trigon(x1, y1, x2, y2, x3, y3, color)
 
             // canvas
             //     .filled_circle(a.x as i16, a.y as i16, 2, Color::GREEN)
             //     .unwrap();
         }
+        let a = projected_face[0];
+        let b = projected_face[1];
+        let c = projected_face[2];
+        canvas
+            .filled_trigon(
+                a.x as i16,
+                a.y as i16,
+                b.x as i16,
+                b.y as i16,
+                c.x as i16,
+                c.y as i16,
+                Color::GREEN,
+            )
+            .unwrap();
     }
 }
 

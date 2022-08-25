@@ -20,11 +20,10 @@ pub struct Application {
     running: bool,
     sdl: Sdl,
     canvas: Canvas<Window>,
-
     paused: bool,
-
     mesh: Mesh,
     camera: Camera,
+    cube: bool,
 }
 
 impl Application {
@@ -41,6 +40,7 @@ impl Application {
             mesh,
             running: true,
             paused: false,
+            cube: true,
         }
     }
 
@@ -61,6 +61,15 @@ impl Application {
                     }
                     Keycode::P => {
                         self.paused = !self.paused;
+                    }
+                    Keycode::T => {
+                        if self.cube {
+                            self.mesh = Mesh::new("./assets/f22.obj");
+                            self.cube = false;
+                        } else {
+                            self.mesh = Mesh::new("./assets/cube.obj");
+                            self.cube = true;
+                        }
                     }
                     Keycode::Left => {}
                     Keycode::Right => {}
