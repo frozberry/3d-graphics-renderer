@@ -88,50 +88,51 @@ impl Mesh {
     }
 
     fn project_faces(&mut self, camera: Camera, cull: bool) {
-        for i in 0..self.faces.len() {
-            let face = self.faces[i];
+        let mut projected_faces: Vec<ProjectedFace> = vec![];
 
-            let mut transformed_verticies = [Vec3::init(); 3];
-            for (j, v_index) in face.iter().enumerate() {
-                let vertex = self.verticies[v_index - 1];
-                let mut rotated_vertex = vertex.rotate(self.rotation);
-                rotated_vertex.z += 5.0;
+        for face in &self.faces {
+            let transformed_verticies: [Vec3; 3] = face
+                .iter()
+                .map(|v_index| {
+                    let vertex = self.verticies[v_index - 1];
+                    let mut rotated_vertex = vertex.rotate(self.rotation);
+                    rotated_vertex.z += 5.;
+                    rotated_vertex
+                })
+                .collect::<Vec<Vec3>>()
+                .try_into()
+                .unwrap();
 
-                transformed_verticies[j] = rotated_vertex;
+            if cull && Self::can_cull(transformed_verticies, camera) {
+                continue;
             }
 
-            let mut projected_triangle = [Vec2::init(); 3];
+            let projected_face: [Vec2; 3] = transformed_verticies
+                .iter()
+                .map(|vertex| vertex.project(camera.fov).centered())
+                .collect::<Vec<Vec2>>()
+                .try_into()
+                .unwrap();
 
-            let mut project = || {
-                for (j, transformed_vertex) in transformed_verticies.iter().enumerate() {
-                    let projected_vertex = transformed_vertex.project(camera.fov);
-                    let centered_vertex = projected_vertex.centered();
-
-                    projected_triangle[j] = centered_vertex
-                }
-                self.projected_faces.push(projected_triangle);
-            };
-
-            // Check backface culling
-            if cull {
-                let va = transformed_verticies[0];
-                let vb = transformed_verticies[1];
-                let vc = transformed_verticies[2];
-
-                let ab = vb - va;
-                let ac = vc - va;
-
-                let normal = ab.cross(ac);
-
-                let camera_ray = camera.pos - va;
-                let dot_normal_camera = normal.dot(camera_ray);
-
-                if dot_normal_camera >= 0. {
-                    project();
-                }
-            } else {
-                project();
-            }
+            projected_faces.push(projected_face);
         }
+
+        self.projected_faces = projected_faces;
+    }
+
+    fn can_cull(vertices: [Vec3; 3], camera: Camera) -> bool {
+        let va = vertices[0];
+        let vb = vertices[1];
+        let vc = vertices[2];
+
+        let ab = vb - va;
+        let ac = vc - va;
+
+        let normal = ab.cross(ac);
+
+        let camera_ray = camera.pos - va;
+        let dot_normal_camera = normal.dot(camera_ray);
+
+        dot_normal_camera < 0.
     }
 }
