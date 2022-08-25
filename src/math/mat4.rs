@@ -2,7 +2,8 @@ use std::ops::Mul;
 
 use super::vec4::Vec4;
 
-struct Mat4 {
+#[derive(Copy, Clone)]
+pub struct Mat4 {
     m: [[f32; 4]; 4],
 }
 
@@ -28,7 +29,7 @@ impl Mat4 {
         // |  0  0  0  1 |
         let mut m = Self::identity();
         m.m[0][0] = x;
-        m.m[1][2] = y;
+        m.m[1][1] = y;
         m.m[2][2] = z;
         m
     }
