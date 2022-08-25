@@ -102,6 +102,16 @@ impl Mesh {
 
             let mut projected_triangle = [Vec2::init(); 3];
 
+            let mut project = || {
+                for (j, transformed_vertex) in transformed_verticies.iter().enumerate() {
+                    let projected_vertex = transformed_vertex.project(camera.fov);
+                    let centered_vertex = projected_vertex.centered();
+
+                    projected_triangle[j] = centered_vertex
+                }
+                self.projected_faces.push(projected_triangle);
+            };
+
             // Check backface culling
             if cull {
                 let va = transformed_verticies[0];
@@ -117,21 +127,10 @@ impl Mesh {
                 let dot_normal_camera = normal.dot(camera_ray);
 
                 if dot_normal_camera >= 0. {
-                    for (j, transformed_vertex) in transformed_verticies.iter().enumerate() {
-                        let projected_vertex = transformed_vertex.project(camera.fov);
-                        let centered_vertex = projected_vertex.centered();
-
-                        projected_triangle[j] = centered_vertex
-                    }
-                    self.projected_faces.push(projected_triangle);
+                    project();
                 }
             } else {
-                for (j, transformed_vertex) in transformed_verticies.iter().enumerate() {
-                    let projected_vertex = transformed_vertex.project(camera.fov);
-                    let centered_vertex = projected_vertex.centered();
-                    projected_triangle[j] = centered_vertex
-                }
-                self.projected_faces.push(projected_triangle);
+                project();
             }
         }
     }
