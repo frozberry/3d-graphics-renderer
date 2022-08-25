@@ -1,10 +1,13 @@
-use std::{fmt::Display, ops::Sub};
+use std::{
+    fmt::{Debug, Display},
+    ops::{Add, Div, Mul, Sub},
+};
 
 use crate::application::{HEIGHT, WIDTH};
 
 use super::vec2::Vec2;
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy)]
 pub struct Vec3 {
     pub x: f32,
     pub y: f32,
@@ -22,6 +25,17 @@ impl Vec3 {
             y: 0.,
             z: 0.,
         }
+    }
+
+    pub fn cross(&self, b: Vec3) -> Vec3 {
+        let x = self.y * b.z - self.z * b.y;
+        let y = self.z * b.x - self.x * b.z;
+        let z = self.x * b.y - self.y * b.x;
+        Vec3::new(x, y, z)
+    }
+
+    pub fn dot(&self, b: Vec3) -> f32 {
+        self.x * b.x + self.y * b.y + self.z * b.z
     }
 
     pub fn rotate(&self, rotation: Vec3) -> Vec3 {
@@ -60,11 +74,41 @@ impl Vec3 {
     }
 }
 
+impl Add for Vec3 {
+    type Output = Vec3;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        Vec3::new(self.x + rhs.x, self.y + rhs.y, self.z + rhs.z)
+    }
+}
+
 impl Sub for Vec3 {
     type Output = Vec3;
 
     fn sub(self, rhs: Self) -> Self::Output {
         Vec3::new(self.x - rhs.x, self.y - rhs.y, self.z - rhs.z)
+    }
+}
+
+impl Mul<f32> for Vec3 {
+    type Output = Vec3;
+
+    fn mul(self, rhs: f32) -> Self::Output {
+        Vec3::new(self.x * rhs, self.y * rhs, self.z * rhs)
+    }
+}
+
+impl Div<f32> for Vec3 {
+    type Output = Vec3;
+
+    fn div(self, rhs: f32) -> Self::Output {
+        Vec3::new(self.x / rhs, self.y / rhs, self.z / rhs)
+    }
+}
+
+impl Debug for Vec3 {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "x: {}, y: {}, z: {}", self.x, self.y, self.z)
     }
 }
 

@@ -1,8 +1,11 @@
-use std::ops::{self};
+use std::{
+    fmt::{Debug, Display},
+    ops::{self},
+};
 
 use crate::application::{HEIGHT, WIDTH};
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy)]
 pub struct Vec2 {
     pub x: f32,
     pub y: f32,
@@ -71,6 +74,17 @@ impl Vec2 {
 
     pub fn cross(&self, v: Vec2) -> f32 {
         self.x * v.y - self.y * v.x
+    }
+}
+
+impl Debug for Vec2 {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "x: {}, y: {}", self.x, self.y,)
+    }
+}
+impl Display for Vec2 {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "x: {}, y: {}", self.x, self.y,)
     }
 }
 
