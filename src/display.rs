@@ -16,9 +16,9 @@ pub fn render_mesh(mesh: &Mesh, canvas: &mut Canvas<Window>) {
 
             draw_line(a, b, canvas);
 
-            canvas
-                .filled_circle(a.x as i16, a.y as i16, 2, Color::GREEN)
-                .unwrap();
+            // canvas
+            //     .filled_circle(a.x as i16, a.y as i16, 2, Color::GREEN)
+            //     .unwrap();
         }
     }
 }
@@ -26,7 +26,11 @@ pub fn render_mesh(mesh: &Mesh, canvas: &mut Canvas<Window>) {
 pub fn draw_line(a: Vec2, b: Vec2, canvas: &mut Canvas<Window>) {
     let ab = b - a;
 
-    let len = if ab.x.abs() > ab.y.abs() { ab.x } else { ab.y };
+    let len = if ab.x.abs() > ab.y.abs() {
+        ab.x.abs()
+    } else {
+        ab.y.abs()
+    };
 
     let x_increment = ab.x / len;
     let y_increment = ab.y / len;

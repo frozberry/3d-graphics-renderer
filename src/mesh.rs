@@ -74,15 +74,16 @@ impl Mesh {
 
         mesh.verticies = verticies;
         mesh.faces = faces;
-        mesh.projected_faces = vec![[Vec2::init(); 3]; mesh.faces.len()];
+        mesh.projected_faces = vec![];
         mesh
     }
 
     pub fn update(&mut self, camera: Camera) {
         // self.rotation.x = -PI;
         self.rotation.x += 0.02;
-        // self.rotation.y += 0.02;
+        self.rotation.y += 0.02;
 
+        self.projected_faces = vec![];
         self.project_faces(camera);
     }
 
@@ -90,15 +91,38 @@ impl Mesh {
         for i in 0..self.faces.len() {
             let face = self.faces[i];
 
+            let mut transformed_verticies = [Vec3::init(); 3];
             for (j, v_index) in face.iter().enumerate() {
                 let vertex = self.verticies[v_index - 1];
-                let rotated_vertex = vertex.rotate(self.rotation);
-                let transformed_vertex = rotated_vertex - camera.pos;
+                let mut rotated_vertex = vertex.rotate(self.rotation);
+                rotated_vertex.z += 5.0;
 
-                let projected_vertex = transformed_vertex.project(camera.fov);
-                let centered_vertex = projected_vertex.centered();
+                transformed_verticies[j] = rotated_vertex;
+            }
 
-                self.projected_faces[i][j] = centered_vertex
+            // Check backface culling
+
+            let va = transformed_verticies[0];
+            let vb = transformed_verticies[1];
+            let vc = transformed_verticies[2];
+
+            let ab = vb - va;
+            let ac = vc - va;
+
+            let normal = ab.cross(ac);
+
+            let camera_ray = camera.pos - va;
+            let dot_normal_camera = normal.dot(camera_ray);
+
+            if dot_normal_camera >= 0. {
+                let mut projected_triangle = [Vec2::init(); 3];
+                for (j, transformed_vertex) in transformed_verticies.iter().enumerate() {
+                    let projected_vertex = transformed_vertex.project(camera.fov);
+                    let centered_vertex = projected_vertex.centered();
+
+                    projected_triangle[j] = centered_vertex
+                }
+                self.projected_faces.push(projected_triangle);
             }
         }
     }

@@ -31,8 +31,8 @@ impl Application {
     pub fn new() -> Self {
         let (sdl, canvas) = init_sdl();
 
-        let mesh = Mesh::new("./assets/f22.obj");
-        let camera = Camera::new(640., Vec3::new(0., 0., -5.));
+        let mesh = Mesh::new("./assets/cube.obj");
+        let camera = Camera::new(640., Vec3::new(0., 0., 0.));
 
         Application {
             sdl,

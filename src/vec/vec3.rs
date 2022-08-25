@@ -28,6 +28,9 @@ impl Vec3 {
     }
 
     pub fn cross(&self, b: Vec3) -> Vec3 {
+        // .x = a.y * b.z - a.z * b.y,
+        // .y = a.z * b.x - a.x * b.z,
+        // .z = a.x * b.y - a.y * b.x
         let x = self.y * b.z - self.z * b.y;
         let y = self.z * b.x - self.x * b.z;
         let z = self.x * b.y - self.y * b.x;
@@ -35,7 +38,8 @@ impl Vec3 {
     }
 
     pub fn dot(&self, b: Vec3) -> f32 {
-        self.x * b.x + self.y * b.y + self.z * b.z
+        // self.x * b.x + self.y * b.y + self.z * b.z
+        (self.x * b.x) + (self.y * b.y) + (self.z * b.z)
     }
 
     pub fn rotate(&self, rotation: Vec3) -> Vec3 {
