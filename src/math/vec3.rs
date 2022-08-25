@@ -5,7 +5,7 @@ use std::{
 
 use crate::application::{HEIGHT, WIDTH};
 
-use super::vec2::Vec2;
+use super::{vec2::Vec2, vec4::Vec4};
 
 #[derive(Clone, Copy)]
 pub struct Vec3 {
@@ -119,5 +119,11 @@ impl Debug for Vec3 {
 impl Display for Vec3 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "x: {}, y: {}, z: {}", self.x, self.y, self.z)
+    }
+}
+
+impl From<Vec4> for Vec3 {
+    fn from(v: Vec4) -> Self {
+        Self::new(v.x, v.y, v.z)
     }
 }
