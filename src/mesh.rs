@@ -131,7 +131,7 @@ impl Mesh {
         }
 
         // Sort the projected faces by their depth
-        projected_faces.sort_by(|a, b| a.1.partial_cmp(&b.1).unwrap());
+        projected_faces.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
 
         let without_depths = projected_faces.iter().map(|tuple| tuple.0).collect();
         self.projected_faces = without_depths;
