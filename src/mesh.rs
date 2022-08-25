@@ -90,15 +90,15 @@ impl Mesh {
     }
 
     pub fn update(&mut self, camera: Camera, cull: bool) {
+        // Reset the last frames faces
+        self.projected_faces = vec![];
+        let mut projected_faces: Vec<(ProjectedFace, f32)> = vec![];
+
         self.rotation.x += 0.01;
         self.rotation.y += 0.01;
         self.rotation.z += 0.01;
         self.translation.z = 5.;
 
-        self.faces_to_projection(camera, cull);
-    }
-
-    fn faces_to_projection(&mut self, camera: Camera, cull: bool) {
         let scale_matrix = Mat4::scale(self.scale.x, self.scale.y, self.scale.z);
         let translation_matrix =
             Mat4::translation(self.translation.x, self.translation.y, self.translation.z);
@@ -106,29 +106,26 @@ impl Mesh {
         let rot_y_matrix = Mat4::rotation_y(self.rotation.y);
         let rot_z_matrix = Mat4::rotation_z(self.rotation.z);
 
-        // Reset the last frames faces
-        self.projected_faces = vec![];
+        let transform_vertex = |v_index| {
+            let vertex = self.verticies[v_index - 1];
+            let vertex4 = Vec4::from(vertex);
 
-        let mut projected_faces: Vec<(ProjectedFace, f32)> = vec![];
+            let mut world_matrix = Mat4::identity();
+            world_matrix = scale_matrix * world_matrix;
+            world_matrix = rot_z_matrix * world_matrix;
+            world_matrix = rot_y_matrix * world_matrix;
+            world_matrix = rot_x_matrix * world_matrix;
+            world_matrix = translation_matrix * world_matrix;
+
+            let transformed_vertex = world_matrix * vertex4;
+            Vec3::from(transformed_vertex)
+        };
 
         for face in &self.faces {
             let transformed_verticies: [Vec3; 3] = face
                 .0
                 .iter()
-                .map(|v_index| {
-                    let vertex = self.verticies[v_index - 1];
-                    let vertex4 = Vec4::from(vertex);
-
-                    let mut world_matrix = Mat4::identity();
-                    world_matrix = scale_matrix * world_matrix;
-                    world_matrix = rot_z_matrix * world_matrix;
-                    world_matrix = rot_y_matrix * world_matrix;
-                    world_matrix = rot_x_matrix * world_matrix;
-                    world_matrix = translation_matrix * world_matrix;
-
-                    let transformed_vertex = world_matrix * vertex4;
-                    Vec3::from(transformed_vertex)
-                })
+                .map(transform_vertex)
                 .collect::<Vec<Vec3>>()
                 .try_into()
                 .unwrap();
