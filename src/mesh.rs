@@ -83,12 +83,14 @@ impl Mesh {
         self.rotation.x += 0.02;
         self.rotation.y += 0.02;
 
-        self.projected_faces = vec![];
-        self.project_faces(camera, cull);
+        self.faces_to_projection(camera, cull);
     }
 
-    fn project_faces(&mut self, camera: Camera, cull: bool) {
-        let mut projected_faces: Vec<ProjectedFace> = vec![];
+    fn faces_to_projection(&mut self, camera: Camera, cull: bool) {
+        // Reset the last frames faces
+        self.projected_faces = vec![];
+
+        let mut projected_faces: Vec<(ProjectedFace, f32)> = vec![];
 
         for face in &self.faces {
             let transformed_verticies: [Vec3; 3] = face
@@ -107,6 +109,11 @@ impl Mesh {
                 continue;
             }
 
+            let average_depth = transformed_verticies
+                .iter()
+                .fold(0., |acc, vertex| acc + vertex.z)
+                / 3.;
+
             let projected_face: [Vec2; 3] = transformed_verticies
                 .iter()
                 .map(|vertex| vertex.project(camera.fov).centered())
@@ -114,12 +121,20 @@ impl Mesh {
                 .try_into()
                 .unwrap();
 
-            projected_faces.push(projected_face);
+            // Store the depth for sorting
+            let face_with_depth = (projected_face, average_depth);
+
+            projected_faces.push(face_with_depth);
         }
 
-        self.projected_faces = projected_faces;
+        // Sort the projected faces by their depth
+        projected_faces.sort_by(|a, b| a.1.partial_cmp(&b.1).unwrap());
+
+        let without_depths = projected_faces.iter().map(|tuple| tuple.0).collect();
+        self.projected_faces = without_depths;
     }
 
+    // Checks if a face can be skipped from backface culling
     fn can_cull(vertices: [Vec3; 3], camera: Camera) -> bool {
         let va = vertices[0];
         let vb = vertices[1];
