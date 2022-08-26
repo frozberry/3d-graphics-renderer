@@ -38,6 +38,8 @@ fn draw_face_wire(projected_face: &ProjectedFace, color: Color, canvas: &mut Can
     for i in 0..3 {
         let a = projected_face.verticies[i];
         let b = projected_face.verticies[(i + 1) % 3];
+        println!("{a} {b}");
+        println!("");
         canvas
             .line(a.x as i16, a.y as i16, b.x as i16, b.y as i16, color)
             .unwrap();
