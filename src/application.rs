@@ -10,6 +10,7 @@ use sdl2::Sdl;
 use sdl2::{event::Event, rect::Point};
 
 use crate::display;
+use crate::light::Light;
 use crate::math::mat4::Mat4;
 use crate::math::vec3::Vec3;
 use crate::mesh::Mesh;
@@ -30,6 +31,7 @@ pub struct Application {
     render_mode: RenderMode,
     cull: bool,
     projection_matrix: Mat4,
+    light: Light,
 }
 
 impl Application {
@@ -44,6 +46,7 @@ impl Application {
 
         let mesh = Mesh::new_cube(projection_matrix);
         let camera = Camera::new(640., Vec3::new(0., 0., 0.));
+        let light = Light::new();
 
         Application {
             sdl,
@@ -56,6 +59,7 @@ impl Application {
             render_mode: RenderMode::Wire,
             cull: true,
             projection_matrix,
+            light,
         }
     }
 
@@ -104,7 +108,7 @@ impl Application {
     /*                                   Update                                   */
     /* -------------------------------------------------------------------------- */
     pub fn update(&mut self) {
-        self.mesh.update(self.camera, self.cull);
+        self.mesh.update(self.camera, self.light, self.cull);
     }
     /* -------------------------------------------------------------------------- */
     /*                                   Render                                   */

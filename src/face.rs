@@ -16,18 +16,20 @@ impl Face {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ProjectedFace {
     pub verticies: [Vec2; 3],
     pub color: Color,
+    pub intensity: f32,
     pub depth: f32,
 }
 
 impl ProjectedFace {
-    pub fn new(verticies: [Vec2; 3], color: Color, depth: f32) -> Self {
+    pub fn new(verticies: [Vec2; 3], color: Color, intensity: f32, depth: f32) -> Self {
         ProjectedFace {
             verticies,
             color,
+            intensity,
             depth,
         }
     }

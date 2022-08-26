@@ -60,18 +60,15 @@ fn draw_verticies(projected_face: &ProjectedFace, canvas: &mut Canvas<Window>) {
 }
 
 fn fill_face(projected_face: &ProjectedFace, canvas: &mut Canvas<Window>) {
+    // println!("projected_face: {:?}", projected_face);
     let a = projected_face.verticies[0];
     let b = projected_face.verticies[1];
     let c = projected_face.verticies[2];
+
+    let color = calc_light_intensity(projected_face.color, projected_face.intensity);
     canvas
         .filled_trigon(
-            a.x as i16,
-            a.y as i16,
-            b.x as i16,
-            b.y as i16,
-            c.x as i16,
-            c.y as i16,
-            projected_face.color,
+            a.x as i16, a.y as i16, b.x as i16, b.y as i16, c.x as i16, c.y as i16, color,
         )
         .unwrap();
 }

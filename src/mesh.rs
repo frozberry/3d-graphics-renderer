@@ -6,6 +6,7 @@ use crate::{
     application::{HEIGHT, WIDTH},
     camera::Camera,
     face::{Face, ProjectedFace},
+    light::Light,
     math::{mat4::Mat4, vec2::Vec2, vec3::Vec3, vec4::Vec4},
     parser::parse_obj,
 };
@@ -27,7 +28,7 @@ impl Mesh {
         let translation = Vec3::init();
         let scale = Vec3::new(1., 1., 1.);
         let projected_faces =
-            vec![ProjectedFace::new([Vec2::init(); 3], Color::WHITE, 0.); faces.len()];
+            vec![ProjectedFace::new([Vec2::init(); 3], Color::WHITE, 1., 0.); faces.len()];
 
         Mesh {
             rotation,
@@ -47,7 +48,7 @@ impl Mesh {
         let scale = Vec3::new(1., 1., 1.);
         let faces = vec![];
         let projected_faces =
-            vec![ProjectedFace::new([Vec2::init(); 3], Color::WHITE, 0.); faces.len()];
+            vec![ProjectedFace::new([Vec2::init(); 3], Color::WHITE, 1., 0.); faces.len()];
 
         Mesh {
             rotation,
@@ -76,17 +77,32 @@ impl Mesh {
         let faces = vec![
             Face::new([1, 2, 3], Color::WHITE),
             Face::new([1, 3, 4], Color::WHITE),
-            Face::new([4, 3, 5], Color::RED),
-            Face::new([4, 5, 6], Color::RED),
-            Face::new([6, 5, 7], Color::GREEN),
-            Face::new([6, 7, 8], Color::GREEN),
-            Face::new([8, 7, 2], Color::BLUE),
-            Face::new([8, 2, 1], Color::BLUE),
-            Face::new([2, 7, 5], Color::MAGENTA),
-            Face::new([2, 5, 3], Color::MAGENTA),
-            Face::new([6, 8, 1], Color::YELLOW),
-            Face::new([6, 1, 4], Color::YELLOW),
+            Face::new([4, 3, 5], Color::WHITE),
+            Face::new([4, 5, 6], Color::WHITE),
+            Face::new([6, 5, 7], Color::WHITE),
+            Face::new([6, 7, 8], Color::WHITE),
+            Face::new([8, 7, 2], Color::WHITE),
+            Face::new([8, 2, 1], Color::WHITE),
+            Face::new([2, 7, 5], Color::WHITE),
+            Face::new([2, 5, 3], Color::WHITE),
+            Face::new([6, 8, 1], Color::WHITE),
+            Face::new([6, 1, 4], Color::WHITE),
         ];
+
+        // let faces = vec![
+        //     Face::new([1, 2, 3], Color::WHITE),
+        //     Face::new([1, 3, 4], Color::WHITE),
+        //     Face::new([4, 3, 5], Color::RED),
+        //     Face::new([4, 5, 6], Color::RED),
+        //     Face::new([6, 5, 7], Color::GREEN),
+        //     Face::new([6, 7, 8], Color::GREEN),
+        //     Face::new([8, 7, 2], Color::BLUE),
+        //     Face::new([8, 2, 1], Color::BLUE),
+        //     Face::new([2, 7, 5], Color::MAGENTA),
+        //     Face::new([2, 5, 3], Color::MAGENTA),
+        //     Face::new([6, 8, 1], Color::YELLOW),
+        //     Face::new([6, 1, 4], Color::YELLOW),
+        // ];
 
         mesh.verticies = verticies;
         mesh.faces = faces;
@@ -94,7 +110,7 @@ impl Mesh {
         mesh
     }
 
-    pub fn update(&mut self, camera: Camera, cull: bool) {
+    pub fn update(&mut self, camera: Camera, light: Light, cull: bool) {
         // Reset the last frames faces
         self.projected_faces = vec![];
         let mut projected_faces: Vec<ProjectedFace> = vec![];
@@ -135,6 +151,12 @@ impl Mesh {
                 .try_into()
                 .unwrap();
 
+            let ab = transformed_verticies[1] - transformed_verticies[0];
+            let ac = transformed_verticies[2] - transformed_verticies[0];
+            let face_normal = ab.cross(ac).unit_vector();
+            let i = -face_normal.dot(light.direction.unit_vector());
+            let intensity = i.clamp(0., 1.);
+
             if cull && Self::can_cull(transformed_verticies, camera) {
                 continue;
             }
@@ -144,7 +166,7 @@ impl Mesh {
                 .fold(0., |acc, vertex| acc + vertex.z)
                 / 3.;
 
-            let projected_face: [Vec2; 3] = transformed_verticies
+            let projected_verticies: [Vec2; 3] = transformed_verticies
                 .iter()
                 .map(|vertex| {
                     let v4 = Vec4::from(*vertex);
@@ -160,10 +182,10 @@ impl Mesh {
                 .try_into()
                 .unwrap();
 
-            // Store the depth for sorting
-            let face_with_depth = ProjectedFace::new(projected_face, face.color, average_depth);
+            let projected_face =
+                ProjectedFace::new(projected_verticies, face.color, intensity, average_depth);
 
-            projected_faces.push(face_with_depth);
+            projected_faces.push(projected_face);
         }
 
         // Sort the projected faces by their depth
