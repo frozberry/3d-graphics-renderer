@@ -1,6 +1,5 @@
-use sdl2::pixels::Color;
-
 use crate::math::vec2::Vec2;
+use sdl2::pixels::Color;
 
 pub struct Face {
     pub verticies_idx: [usize; 3],

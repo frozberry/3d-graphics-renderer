@@ -1,10 +1,9 @@
+use crate::{face::Face, math::vec3};
+use sdl2::pixels::Color;
 use std::{
     fs::File,
     io::{BufRead, BufReader},
 };
-
-use crate::{face::Face, math::vec3};
-use sdl2::pixels::Color;
 use vec3::Vec3;
 
 pub fn parse_obj(path: &str) -> (Vec<Vec3>, Vec<Face>) {

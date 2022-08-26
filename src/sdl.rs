@@ -13,9 +13,8 @@ pub fn init_sdl() -> (Sdl, Canvas<Window>) {
 
     let mut canvas = window.into_canvas().build().unwrap();
 
-    canvas.set_draw_color(Color::RGB(0, 64, 255));
+    canvas.set_draw_color(Color::BLACK);
     canvas.clear();
-    canvas.present();
 
     return (sdl_context, canvas);
 }

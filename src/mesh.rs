@@ -1,7 +1,3 @@
-use std::f32::consts::PI;
-
-use sdl2::pixels::Color;
-
 use crate::{
     application::{HEIGHT, WIDTH},
     camera::Camera,
@@ -10,6 +6,7 @@ use crate::{
     math::{mat4::Mat4, vec2::Vec2, vec3::Vec3, vec4::Vec4},
     parser::parse_obj,
 };
+use sdl2::pixels::Color;
 
 pub struct Mesh {
     rotation: Vec3,

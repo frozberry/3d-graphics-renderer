@@ -1,17 +1,5 @@
-use sdl2::{
-    gfx::primitives::DrawRenderer,
-    pixels::Color,
-    rect::{Point, Rect},
-    render::Canvas,
-    video::Window,
-};
-
-use crate::{
-    face::ProjectedFace,
-    math::vec2::Vec2,
-    mesh::Mesh,
-    render_mode::{self, RenderMode},
-};
+use crate::{face::ProjectedFace, mesh::Mesh, render_mode::RenderMode};
+use sdl2::{gfx::primitives::DrawRenderer, pixels::Color, render::Canvas, video::Window};
 
 pub fn render_mesh(mesh: &Mesh, render_mode: RenderMode, canvas: &mut Canvas<Window>) {
     for projected_face in &mesh.projected_faces {
@@ -38,8 +26,6 @@ fn draw_face_wire(projected_face: &ProjectedFace, color: Color, canvas: &mut Can
     for i in 0..3 {
         let a = projected_face.verticies[i];
         let b = projected_face.verticies[(i + 1) % 3];
-        println!("{a} {b}");
-        println!("");
         canvas
             .line(a.x as i16, a.y as i16, b.x as i16, b.y as i16, color)
             .unwrap();
