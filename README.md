@@ -1,6 +1,7 @@
 # 3D Graphics Renderer Rust
 
 A 3D graphics renderer built with Rust and SDL2.
+
 https://user-images.githubusercontent.com/93860959/186969981-6ae56386-2ec5-4f17-8cd0-a2822d722d35.mp4
 
 ### Features
