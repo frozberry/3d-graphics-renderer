@@ -158,7 +158,7 @@ impl Mesh {
                 continue;
             }
 
-            let intensity = -face_normal.dot(light.direction.unit_vector()).clamp(0., 1.);
+            let intensity = (-face_normal.dot(light.direction.unit_vector())).clamp(0., 1.);
 
             let average_depth = transformed_verticies
                 .iter()
