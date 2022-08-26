@@ -53,7 +53,7 @@ pub fn parse_obj(path: &str) -> (Vec<Vec3>, Vec<Face>) {
                         f2.parse::<usize>().unwrap(),
                         f3.parse::<usize>().unwrap(),
                     ],
-                    Color::GREEN,
+                    Color::WHITE,
                 );
                 faces.push(face)
             }

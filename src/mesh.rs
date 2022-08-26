@@ -119,6 +119,7 @@ impl Mesh {
         self.rotation.y += 0.01;
         self.rotation.z += 0.01;
         self.translation.z = 5.;
+        self.scale.z = 1.2;
 
         let scale_matrix = Mat4::scale(self.scale.x, self.scale.y, self.scale.z);
         let translation_matrix =

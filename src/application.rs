@@ -44,7 +44,8 @@ impl Application {
         let zfar = 100.;
         let projection_matrix = Mat4::perspective(fov, aspect, znear, zfar);
 
-        let mesh = Mesh::new_cube(projection_matrix);
+        // let mesh = Mesh::new_cube(projection_matrix);
+        let mesh = Mesh::from_obj("./assets/f22.obj", projection_matrix);
         let camera = Camera::new(640., Vec3::new(0., 0., 0.));
         let light = Light::new();
 
