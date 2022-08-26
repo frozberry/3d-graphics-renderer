@@ -174,7 +174,7 @@ impl Mesh {
 
                     v2.x *= WIDTH as f32 / 2.;
                     v2.y *= HEIGHT as f32 / 2.;
-
+                    v2.y *= -1.;
                     v2.centered()
                 })
                 .collect::<Vec<Vec2>>()
