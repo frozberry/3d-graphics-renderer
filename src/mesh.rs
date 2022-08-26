@@ -152,15 +152,13 @@ impl Mesh {
                 .try_into()
                 .unwrap();
 
-            let ab = transformed_verticies[1] - transformed_verticies[0];
-            let ac = transformed_verticies[2] - transformed_verticies[0];
-            let face_normal = ab.cross(ac).unit_vector();
-            let i = -face_normal.dot(light.direction.unit_vector());
-            let intensity = i.clamp(0., 1.);
+            let face_normal = Self::face_normal(transformed_verticies);
 
-            if cull && Self::can_cull(transformed_verticies, camera) {
+            if cull && Self::can_cull(face_normal, transformed_verticies[0], camera) {
                 continue;
             }
+
+            let intensity = -face_normal.dot(light.direction.unit_vector()).clamp(0., 1.);
 
             let average_depth = transformed_verticies
                 .iter()
@@ -195,19 +193,17 @@ impl Mesh {
     }
 
     // Checks if a face can be skipped from backface culling
-    fn can_cull(vertices: [Vec3; 3], camera: Camera) -> bool {
-        let va = vertices[0];
-        let vb = vertices[1];
-        let vc = vertices[2];
-
-        let ab = (vb - va).unit_vector();
-        let ac = (vc - va).unit_vector();
-
-        let normal = ab.cross(ac).unit_vector();
-
+    fn can_cull(normal: Vec3, va: Vec3, camera: Camera) -> bool {
         let camera_ray = camera.pos - va;
         let dot_normal_camera = normal.dot(camera_ray);
 
         dot_normal_camera < 0.
+    }
+
+    fn face_normal(verticies: [Vec3; 3]) -> Vec3 {
+        let ab = verticies[1] - verticies[0];
+        let ac = verticies[2] - verticies[0];
+
+        ab.cross(ac).unit_vector()
     }
 }
