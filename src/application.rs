@@ -74,7 +74,6 @@ impl Application {
                 Event::Quit { .. } => {
                     self.running = false;
                 }
-                Event::MouseButtonDown { x, y, .. } => {}
                 Event::KeyDown { keycode, .. } => match keycode.unwrap() {
                     Keycode::Escape => {
                         self.running = false;
@@ -83,10 +82,10 @@ impl Application {
                         self.paused = !self.paused;
                     }
                     Keycode::C => self.cull = !self.cull,
-                    Keycode::Q => self.render_mode = RenderMode::FillTriangle,
-                    Keycode::W => self.render_mode = RenderMode::FillTriangleWire,
-                    Keycode::E => self.render_mode = RenderMode::Wire,
-                    Keycode::R => self.render_mode = RenderMode::WireVertex,
+                    Keycode::Num1 => self.render_mode = RenderMode::FillTriangle,
+                    Keycode::Num2 => self.render_mode = RenderMode::FillTriangleWire,
+                    Keycode::Num3 => self.render_mode = RenderMode::Wire,
+                    Keycode::Num4 => self.render_mode = RenderMode::WireVertex,
                     Keycode::T => {
                         if self.cube {
                             self.mesh = Mesh::from_obj("./assets/f22.obj", self.projection_matrix);
@@ -96,8 +95,6 @@ impl Application {
                             self.cube = true;
                         }
                     }
-                    Keycode::Left => {}
-                    Keycode::Right => {}
                     _ => {}
                 },
                 _ => {}
