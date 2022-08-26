@@ -54,7 +54,6 @@ fn draw_verticies(projected_face: &ProjectedFace, canvas: &mut Canvas<Window>) {
 }
 
 fn fill_face(projected_face: &ProjectedFace, canvas: &mut Canvas<Window>) {
-    // println!("projected_face: {:?}", projected_face);
     let a = projected_face.verticies[0];
     let b = projected_face.verticies[1];
     let c = projected_face.verticies[2];

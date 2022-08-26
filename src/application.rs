@@ -56,8 +56,8 @@ impl Application {
             mesh,
             running: true,
             paused: false,
-            cube: true,
-            render_mode: RenderMode::Wire,
+            cube: false,
+            render_mode: RenderMode::FillTriangle,
             cull: true,
             projection_matrix,
             light,
@@ -83,19 +83,19 @@ impl Application {
                         self.paused = !self.paused;
                     }
                     Keycode::C => self.cull = !self.cull,
-                    Keycode::Q => self.render_mode = RenderMode::Wire,
-                    Keycode::W => self.render_mode = RenderMode::WireVertex,
-                    Keycode::E => self.render_mode = RenderMode::FillTriangle,
-                    Keycode::R => self.render_mode = RenderMode::FillTriangleWire,
-                    // Keycode::T => {
-                    //     if self.cube {
-                    //         self.mesh = Mesh::new("./assets/f22.obj");
-                    //         self.cube = false;
-                    //     } else {
-                    //         self.mesh = Mesh::new("./assets/cube.obj");
-                    //         self.cube = true;
-                    //     }
-                    // }
+                    Keycode::Q => self.render_mode = RenderMode::FillTriangle,
+                    Keycode::W => self.render_mode = RenderMode::FillTriangleWire,
+                    Keycode::E => self.render_mode = RenderMode::Wire,
+                    Keycode::R => self.render_mode = RenderMode::WireVertex,
+                    Keycode::T => {
+                        if self.cube {
+                            self.mesh = Mesh::from_obj("./assets/f22.obj", self.projection_matrix);
+                            self.cube = false;
+                        } else {
+                            self.mesh = Mesh::new_cube(self.projection_matrix);
+                            self.cube = true;
+                        }
+                    }
                     Keycode::Left => {}
                     Keycode::Right => {}
                     _ => {}

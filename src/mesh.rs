@@ -77,32 +77,17 @@ impl Mesh {
         let faces = vec![
             Face::new([1, 2, 3], Color::WHITE),
             Face::new([1, 3, 4], Color::WHITE),
-            Face::new([4, 3, 5], Color::WHITE),
-            Face::new([4, 5, 6], Color::WHITE),
-            Face::new([6, 5, 7], Color::WHITE),
-            Face::new([6, 7, 8], Color::WHITE),
-            Face::new([8, 7, 2], Color::WHITE),
-            Face::new([8, 2, 1], Color::WHITE),
-            Face::new([2, 7, 5], Color::WHITE),
-            Face::new([2, 5, 3], Color::WHITE),
-            Face::new([6, 8, 1], Color::WHITE),
-            Face::new([6, 1, 4], Color::WHITE),
+            Face::new([4, 3, 5], Color::RED),
+            Face::new([4, 5, 6], Color::RED),
+            Face::new([6, 5, 7], Color::GREEN),
+            Face::new([6, 7, 8], Color::GREEN),
+            Face::new([8, 7, 2], Color::BLUE),
+            Face::new([8, 2, 1], Color::BLUE),
+            Face::new([2, 7, 5], Color::MAGENTA),
+            Face::new([2, 5, 3], Color::MAGENTA),
+            Face::new([6, 8, 1], Color::YELLOW),
+            Face::new([6, 1, 4], Color::YELLOW),
         ];
-
-        // let faces = vec![
-        //     Face::new([1, 2, 3], Color::WHITE),
-        //     Face::new([1, 3, 4], Color::WHITE),
-        //     Face::new([4, 3, 5], Color::RED),
-        //     Face::new([4, 5, 6], Color::RED),
-        //     Face::new([6, 5, 7], Color::GREEN),
-        //     Face::new([6, 7, 8], Color::GREEN),
-        //     Face::new([8, 7, 2], Color::BLUE),
-        //     Face::new([8, 2, 1], Color::BLUE),
-        //     Face::new([2, 7, 5], Color::MAGENTA),
-        //     Face::new([2, 5, 3], Color::MAGENTA),
-        //     Face::new([6, 8, 1], Color::YELLOW),
-        //     Face::new([6, 1, 4], Color::YELLOW),
-        // ];
 
         mesh.verticies = verticies;
         mesh.faces = faces;
