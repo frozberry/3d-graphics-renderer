@@ -17,10 +17,10 @@ pub fn render_mesh(mesh: &Mesh, render_mode: RenderMode, canvas: &mut Canvas<Win
     for projected_face in &mesh.projected_faces {
         match render_mode {
             RenderMode::Wire => {
-                draw_face_wire(projected_face, canvas);
+                draw_face_wire(projected_face, Color::GREEN, canvas);
             }
             RenderMode::WireVertex => {
-                draw_face_wire(projected_face, canvas);
+                draw_face_wire(projected_face, Color::RGB(0, 200, 0), canvas);
                 draw_verticies(projected_face, canvas);
             }
             RenderMode::FillTriangle => {
@@ -28,24 +28,18 @@ pub fn render_mesh(mesh: &Mesh, render_mode: RenderMode, canvas: &mut Canvas<Win
             }
             RenderMode::FillTriangleWire => {
                 fill_face(projected_face, canvas);
-                draw_face_wire(projected_face, canvas);
+                draw_face_wire(projected_face, Color::BLACK, canvas);
             }
         }
     }
 }
 
-fn draw_face_wire(projected_face: &ProjectedFace, canvas: &mut Canvas<Window>) {
+fn draw_face_wire(projected_face: &ProjectedFace, color: Color, canvas: &mut Canvas<Window>) {
     for i in 0..3 {
         let a = projected_face.verticies[i];
         let b = projected_face.verticies[(i + 1) % 3];
         canvas
-            .line(
-                a.x as i16,
-                a.y as i16,
-                b.x as i16,
-                b.y as i16,
-                projected_face.color,
-            )
+            .line(a.x as i16, a.y as i16, b.x as i16, b.y as i16, color)
             .unwrap();
     }
 }
@@ -54,7 +48,7 @@ fn draw_verticies(projected_face: &ProjectedFace, canvas: &mut Canvas<Window>) {
     for i in 0..3 {
         let a = projected_face.verticies[i];
         canvas
-            .filled_circle(a.x as i16, a.y as i16, 2, projected_face.color)
+            .filled_circle(a.x as i16, a.y as i16, 2, Color::GREEN)
             .unwrap();
     }
 }
