@@ -6,6 +6,7 @@ mod application;
 mod camera;
 mod display;
 mod face;
+mod light;
 mod math;
 mod mesh;
 mod parser;

@@ -47,7 +47,7 @@ pub fn parse_obj(path: &str) -> (Vec<Vec3>, Vec<Face>) {
                 let t3 = face_triples.next().unwrap();
                 let f3 = t3.split("/").next().unwrap();
 
-                let face = (
+                let face = Face::new(
                     [
                         f1.parse::<usize>().unwrap(),
                         f2.parse::<usize>().unwrap(),

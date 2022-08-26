@@ -72,18 +72,18 @@ impl Mesh {
         ];
 
         let faces = vec![
-            ([1, 2, 3], Color::WHITE),
-            ([1, 3, 4], Color::WHITE),
-            ([4, 3, 5], Color::RED),
-            ([4, 5, 6], Color::RED),
-            ([6, 5, 7], Color::GREEN),
-            ([6, 7, 8], Color::GREEN),
-            ([8, 7, 2], Color::BLUE),
-            ([8, 2, 1], Color::BLUE),
-            ([2, 7, 5], Color::MAGENTA),
-            ([2, 5, 3], Color::MAGENTA),
-            ([6, 8, 1], Color::YELLOW),
-            ([6, 1, 4], Color::YELLOW),
+            Face::new([1, 2, 3], Color::WHITE),
+            Face::new([1, 3, 4], Color::WHITE),
+            Face::new([4, 3, 5], Color::RED),
+            Face::new([4, 5, 6], Color::RED),
+            Face::new([6, 5, 7], Color::GREEN),
+            Face::new([6, 7, 8], Color::GREEN),
+            Face::new([8, 7, 2], Color::BLUE),
+            Face::new([8, 2, 1], Color::BLUE),
+            Face::new([2, 7, 5], Color::MAGENTA),
+            Face::new([2, 5, 3], Color::MAGENTA),
+            Face::new([6, 8, 1], Color::YELLOW),
+            Face::new([6, 1, 4], Color::YELLOW),
         ];
 
         mesh.verticies = verticies;
@@ -126,7 +126,7 @@ impl Mesh {
 
         for face in &self.faces {
             let transformed_verticies: [Vec3; 3] = face
-                .0
+                .verticies_idx
                 .iter()
                 .map(transform_vertex)
                 .collect::<Vec<Vec3>>()
@@ -159,7 +159,7 @@ impl Mesh {
                 .unwrap();
 
             // Store the depth for sorting
-            let face_with_depth = ((projected_face, face.1), average_depth);
+            let face_with_depth = ((projected_face, face.color), average_depth);
 
             projected_faces.push(face_with_depth);
         }

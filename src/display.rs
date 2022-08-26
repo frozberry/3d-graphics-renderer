@@ -8,9 +8,9 @@ use sdl2::{
 
 use crate::{
     face::ProjectedFace,
+    math::vec2::Vec2,
     mesh::Mesh,
     render_mode::{self, RenderMode},
-    math::vec2::Vec2,
 };
 
 pub fn render_mesh(mesh: &Mesh, render_mode: RenderMode, canvas: &mut Canvas<Window>) {
@@ -74,6 +74,13 @@ fn fill_face(projected_face: &ProjectedFace, canvas: &mut Canvas<Window>) {
             projected_face.1,
         )
         .unwrap();
+}
+
+fn calc_light_intensity(color: Color, intensity: f32) -> Color {
+    let r = color.r as f32 * intensity;
+    let g = color.g as f32 * intensity;
+    let b = color.b as f32 * intensity;
+    Color::RGB(r as u8, g as u8, b as u8)
 }
 
 // pub fn draw_line(a: Vec2, b: Vec2, canvas: &mut Canvas<Window>) {
