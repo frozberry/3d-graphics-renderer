@@ -32,7 +32,7 @@ git clone git@github.com:frozberry/3d-graphics-renderer.git
 cd 3d-graphics-renderer 
 cargo run --release
 ```
-
+## Controls 
 `1` Fill polygon mode
 
 `2` Fill polygon with wireframe
