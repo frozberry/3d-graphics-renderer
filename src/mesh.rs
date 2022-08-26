@@ -26,7 +26,8 @@ impl Mesh {
         let rotation = Vec3::init();
         let translation = Vec3::init();
         let scale = Vec3::new(1., 1., 1.);
-        let projected_faces = vec![([Vec2::init(); 3], Color::WHITE); faces.len()];
+        let projected_faces =
+            vec![ProjectedFace::new([Vec2::init(); 3], Color::WHITE, 0.); faces.len()];
 
         Mesh {
             rotation,
@@ -45,7 +46,8 @@ impl Mesh {
         let translation = Vec3::init();
         let scale = Vec3::new(1., 1., 1.);
         let faces = vec![];
-        let projected_faces = vec![([Vec2::init(); 3], Color::WHITE); faces.len()];
+        let projected_faces =
+            vec![ProjectedFace::new([Vec2::init(); 3], Color::WHITE, 0.); faces.len()];
 
         Mesh {
             rotation,
@@ -95,7 +97,7 @@ impl Mesh {
     pub fn update(&mut self, camera: Camera, cull: bool) {
         // Reset the last frames faces
         self.projected_faces = vec![];
-        let mut projected_faces: Vec<(ProjectedFace, f32)> = vec![];
+        let mut projected_faces: Vec<ProjectedFace> = vec![];
 
         self.rotation.x += 0.01;
         self.rotation.y += 0.01;
@@ -159,16 +161,14 @@ impl Mesh {
                 .unwrap();
 
             // Store the depth for sorting
-            let face_with_depth = ((projected_face, face.color), average_depth);
+            let face_with_depth = ProjectedFace::new(projected_face, face.color, average_depth);
 
             projected_faces.push(face_with_depth);
         }
 
         // Sort the projected faces by their depth
-        projected_faces.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
-
-        let without_depths = projected_faces.iter().map(|tuple| tuple.0).collect();
-        self.projected_faces = without_depths;
+        projected_faces.sort_by(|a, b| b.depth.partial_cmp(&a.depth).unwrap());
+        self.projected_faces = projected_faces;
     }
 
     // Checks if a face can be skipped from backface culling

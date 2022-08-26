@@ -36,15 +36,15 @@ pub fn render_mesh(mesh: &Mesh, render_mode: RenderMode, canvas: &mut Canvas<Win
 
 fn draw_face_wire(projected_face: &ProjectedFace, canvas: &mut Canvas<Window>) {
     for i in 0..3 {
-        let a = projected_face.0[i];
-        let b = projected_face.0[(i + 1) % 3];
+        let a = projected_face.verticies[i];
+        let b = projected_face.verticies[(i + 1) % 3];
         canvas
             .line(
                 a.x as i16,
                 a.y as i16,
                 b.x as i16,
                 b.y as i16,
-                projected_face.1,
+                projected_face.color,
             )
             .unwrap();
     }
@@ -52,17 +52,17 @@ fn draw_face_wire(projected_face: &ProjectedFace, canvas: &mut Canvas<Window>) {
 
 fn draw_verticies(projected_face: &ProjectedFace, canvas: &mut Canvas<Window>) {
     for i in 0..3 {
-        let a = projected_face.0[i];
+        let a = projected_face.verticies[i];
         canvas
-            .filled_circle(a.x as i16, a.y as i16, 2, projected_face.1)
+            .filled_circle(a.x as i16, a.y as i16, 2, projected_face.color)
             .unwrap();
     }
 }
 
 fn fill_face(projected_face: &ProjectedFace, canvas: &mut Canvas<Window>) {
-    let a = projected_face.0[0];
-    let b = projected_face.0[1];
-    let c = projected_face.0[2];
+    let a = projected_face.verticies[0];
+    let b = projected_face.verticies[1];
+    let c = projected_face.verticies[2];
     canvas
         .filled_trigon(
             a.x as i16,
@@ -71,7 +71,7 @@ fn fill_face(projected_face: &ProjectedFace, canvas: &mut Canvas<Window>) {
             b.y as i16,
             c.x as i16,
             c.y as i16,
-            projected_face.1,
+            projected_face.color,
         )
         .unwrap();
 }
